@@ -81,3 +81,4 @@ export const Thankyou = () => {
 }
 
 
+export default Thankyou
