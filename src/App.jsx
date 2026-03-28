@@ -1,4 +1,4 @@
-import Home from "./pages/home"
+import Home from "./pages/Home"
 import ProductDetail from "./pages/ProductDetail"
 import Cart from "./pages/Cart"
 import Checkout from "./pages/Checkout"
@@ -13,7 +13,7 @@ import { logout, setUser } from "./store/userslice"
 
 
 
-import { BrowserRouter as Router, Routes, Route, Outlet, BrowserRouter } from "react-router-dom"
+import { BrowserRouter as  Routes, Route, Outlet, BrowserRouter } from "react-router-dom"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 
 
