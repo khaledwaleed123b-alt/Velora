@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import Logo from "../assets/LogoWhite.png"
+
 import { ShoppingCart, User } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
@@ -41,7 +41,7 @@ const userInfo = useSelector((state) => state.user.userInfo)
     
     <div className="flex gap-2 justify-center items-center" >
 
-      <Link to="/"><img src={Logo} alt="Logo" className="md:w-18 w-12" /></Link>
+      <Link to="/"><img src="/public/LogoWhite.png" alt="Logo" className="md:w-18 w-12" /></Link>
       
 
     </div>

@@ -6,14 +6,14 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
-import { Thankyou } from "./pages/Thankyou"
+import Thankyou  from "./pages/Thankyou"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { logout, setUser } from "./store/userslice"
 
 
 
-import { BrowserRouter as  Routes, Route, Outlet, BrowserRouter } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 
 
