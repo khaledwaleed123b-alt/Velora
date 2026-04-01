@@ -23,13 +23,13 @@ const dispatch = useDispatch()
 useEffect(() => {
  const getProducts = async () => {
     try {
-        const response = await fetch ("https://fakestoreapi.com/products")
+        const response = await fetch ("https://dummyjson.com/products")
         const data = await response.json()
 
-  // Shuffle products
-    const shuffled = [...data].sort(() => 0.5 - Math.random())
+  
+    const shuffled = data.products.sort(() => 0.5 - Math.random())
 
-    // Take only 10
+    
     const randomProducts = shuffled.slice(0, 8)
 
 
@@ -70,9 +70,9 @@ getProducts()
     <div className="flex flex-col">
 
     <div className="flex  w-full  px-10 relative">
-      <h1 className="md:text-2xl text-xl font-bold text-center mt-8 mb-4 justify-start">Featured Products</h1>
-      <Link to="/products" className="mt-8 mb-4 absolute right-10">
-        <p className="text-lg text-gray-600">View All</p>
+      <h1 className="md:text-xl text-lg lg:text-2xl font-bold text-center pt-8 pb-4 justify-start">Featured Products</h1>
+      <Link to="/products" className="md:pt-8 pt-9 pb-4 absolute right-10">
+        <p className="md:text-lg text-sm lg:text-xl  text-gray-600">View All</p>
       </Link>
     </div>
 
@@ -95,12 +95,16 @@ getProducts()
 
     {products.map((product) => (
 
-       <div className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200">
+       <div 
+       
+        className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
+         onClick={() => handleProductClick(product)}
+       >
       
       {/* Image */}
       <div className="bg-gray-50 md:h-48 flex items-center justify-center p-4 h-38">
         <img
-          src={product.image}
+          src={product.thumbnail || product.images[0]}
           alt={product.title}
           className="h-full w-full object-contain"
         />
@@ -128,31 +132,26 @@ getProducts()
           </span>
           </div>
           <span className="text-xs text-gray-400 flex items-center gap-1">{product.category}</span>
-          <span className="text-xs text-gray-400 flex items-center gap-1"><Star className="w-3 h-3 text-yellow-500 fill-current" /> {product.rating?.rate}</span>
+          <span className="text-xs text-gray-400 flex items-center gap-1"><Star className="w-3 h-3 text-yellow-500 fill-current" /> {product.rating}</span>
         </div>
 
         {/* Actions */}
         <div className=" gap-2 mt-auto py-3 px-2 grid md:grid-cols-2 grid-cols-1 ">
-          
-            <button
-              onClick={() => handleProductClick(product)}
-              className=" h-9 bg-transparent border border-gray-300 rounded-lg text-xs text-gray-800 hover:bg-gray-200 transition w-full shadow-lg cursor-pointer " 
-            >
-              View details
-            </button>
-         
+
           <button
-          onClick={() => dispatch(addToCart({...product, 
-            id : product.id,
-            title : product.title,
-            price : product.price,
-            image : product.image,
-            category : product.category,
-            description : product.description,
-            length : product.length,
-            quantity:1}
-            
-          ))}
+   onClick={(e) => {
+  e.stopPropagation(); 
+  dispatch(addToCart({
+    id: product.id,
+    title: product.title,
+    price: product.price,
+    image: product.thumbnail || product.images[0],
+    category: product.category,
+    description: product.description,
+    length: product.length,
+    quantity: 1,
+  }));
+}}
             className=" h-9 bg-gray-900 border-none rounded-lg text-xs text-white hover:bg-gray-700 transition w-full shadow-lg cursor-pointer"
           >
             Add to cart

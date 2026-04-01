@@ -43,14 +43,14 @@ const dispatch = useDispatch()
 
         <div className="grid grid-cols-1 gap-6 border p-4 rounded-lg  border-gray-600 justify-center items-center bg-gray-100 shadow-xl ">
           {products.map((product) => (
-            <div key={product.id} className=" p-4 rounded-lg shadow-lg flex gap-20 items-center justify-between bg-white" >
+            <div key={product.id} className=" p-4 rounded-lg shadow-lg flex gap-20 items-center justify-around bg-white" >
 
               <div className='flex flex-col items-center gap-2 justify-center'>
-              <img src={product.image} alt={product.title} className="w-30 h-30  mb-4" />
-              <h2 className="text-sm font-semibold w-[150px] ">{product.title}</h2>
+              <img src={product.image} alt={product.title} className="md:w-30 md:h-30 w-20 h-20 mb-4" />
+              <h2 className="md:text-sm text-xs font-semibold w-[150px] ">{product.title}</h2>
               </div>
 
-              <div className='flex flex-col md:flex-row gap-5'>
+              <div className='flex flex-col md:flex-row gap-5 md:m-0 -ml-10'>
 
               <div className='flex items-center gap-2 justify-center'>
               <button onClick={() => dispatch(incrementQuantity(product.id))} className="bg-transparent text-black border border-gray-500 py-2 px-4 rounded-lg hover:bg-gray-300 md:text-base text-xs cursor-pointer">

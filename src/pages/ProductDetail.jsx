@@ -36,7 +36,7 @@ function ProductDetail() {
         
         <div className="bg-gray-50 rounded-2xl p-10 flex items-center justify-center border">
           <img
-            src={product.image}
+            src={product.thumbnail || product.images[0]}
             alt={product.title}
             className="max-h-[400px] object-contain"
           />
@@ -58,10 +58,7 @@ function ProductDetail() {
 
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Star className="w-4 h-4 text-yellow-500 fill-current" />
-            <span>{product.rating?.rate}</span>
-            <span className="text-gray-400">
-              ({product.rating?.count} reviews)
-            </span>
+            <span>{product.rating}</span>
           </div>
 
           

@@ -11,28 +11,8 @@ import { setSelectedProduct } from "../store/productDetail";
 const AllProducts = () => {
 
 
-
-
-
-const categories = [
-                  { label: "All", value: "All" },
-                  { label: "Men's Clothing", value: "men's clothing" },
-                  { label: "Women's Clothing", value: "women's clothing" },
-                  { label: "Electronics", value: "electronics" },
-                  { label: "Jewelery", value: "jewelery" },
-                ]
-
-const sortOptions = [
-                  "Featured",
-                  "Highest Rated",
-                  "Lowest Rated",
-                  "Highest Price",
-                  "Lowest Price",
-                ]
-
-
 const [currentPage, setCurrentPage] = useState(1);
-const itemsPerPage = 8;
+const itemsPerPage = 6;
 
 const [searchTerm, setSearchTerm] = useState("");
 const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -46,6 +26,55 @@ const [loading, setLoading] = useState(true)
 
 const [activeCategory, setActiveCategory] = useState("All")
 const [activeSort, setActiveSort] = useState("Featured")
+
+
+
+useEffect(() => {
+
+  const getProducts = async () => {
+    try {
+       const response = await fetch("https://dummyjson.com/products")
+       const data = await response.json()
+      
+       setTimeout(() => {
+        setProducts(data.products);
+        console.log(data)
+        setLoading(false);
+       } , 1000 ) 
+
+    } catch (error) {
+      setLoading(false)
+      console.error("Error fetching products:", error)
+      return (
+        <div className="flex items-center justify-center h-screen">
+          <p className="text-red-500 text-lg">Error fetching products. Please try again later.</p>
+        </div> 
+      )
+    }
+  
+  
+  
+  }
+
+getProducts()
+
+} , [])
+
+
+
+
+const categories = ["All", ...new Set(products.map(p => p.category))].map(category => ({ label: category, value: category }));
+
+const sortOptions = [
+                  "Featured",
+                  "Highest Rated",
+                  "Lowest Rated",
+                  "Highest Price",
+                  "Lowest Price",
+                ]
+
+
+
 
 const filteredProducts = products
   .filter((p) => {
@@ -61,11 +90,11 @@ const sortedProducts = [...filteredProducts].sort((a, b) => {
   if (activeSort === "Featured") return 0;
 
   if (activeSort === "Highest Rated") {
-    return (b.rating?.rate || 0) - (a.rating?.rate || 0);
+    return (b.rating?.rate || 0) - (a.rating || 0);
   }
 
   if (activeSort === "Lowest Rated") {
-    return (a.rating?.rate || 0) - (b.rating?.rate || 0);
+    return (a.rating?.rate || 0) - (b.rating || 0);
   }
 
   if (activeSort === "Highest Price") {
@@ -92,36 +121,7 @@ useEffect(() => {
 }, [activeCategory, activeSort, searchTerm]);
 
 
-useEffect(() => {
 
-  const getProducts = async () => {
-    try {
-       const response = await fetch("https://fakestoreapi.com/products")
-       const data = await response.json()
-      
-       setTimeout(() => {
-        setProducts(data);
-        console.log(data)
-        setLoading(false);
-       } , 1000 ) 
-
-    } catch (error) {
-      setLoading(false)
-      console.error("Error fetching products:", error)
-      return (
-        <div className="flex items-center justify-center h-screen">
-          <p className="text-red-500 text-lg">Error fetching products. Please try again later.</p>
-        </div> 
-      )
-    }
-  
-  
-  
-  }
-
-getProducts()
-
-} , [])
 
 const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -347,13 +347,14 @@ const displayedProducts = isMobile ? currentProducts : sortedProducts;
     {displayedProducts.map((product) => (
 
        <div
+       onClick={() => handleProductClick(product)}
        key={product.id}
-       className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200">
+       className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer">
       
       {/* Image */}
       <div className="bg-gray-50 md:h-48 flex items-center justify-center p-4 h-38">
         <img
-          src={product.image}
+          src={product.thumbnail || product.images[0]}
           alt={product.title}
           className="h-full w-full object-contain"
         />
@@ -381,34 +382,26 @@ const displayedProducts = isMobile ? currentProducts : sortedProducts;
           </span>
           </div>
           <span className="text-xs text-gray-400 flex items-center gap-1">{product.category}</span>
-          <span className="text-xs text-gray-400 flex items-center gap-1"><Star className="w-3 h-3 text-yellow-500 fill-current" /> {product.rating?.rate}</span>
+          <span className="text-xs text-gray-400 flex items-center gap-1"><Star className="w-3 h-3 text-yellow-500 fill-current" /> {product.rating}</span>
         </div>
 
         {/* Actions */}
         <div className=" gap-2 mt-auto py-3 px-2 grid md:grid-cols-2 grid-cols-1 ">
         
-          
-          
-            <button
-
-            onClick={() => handleProductClick(product)}
-              className=" h-9 bg-transparent border border-gray-300 rounded-lg text-xs text-gray-800 hover:bg-gray-200 transition w-full shadow-lg cursor-pointer " 
-            >
-              View details
-            </button>
-        
           <button
-                     onClick={() => dispatch(addToCart({...product, 
-                          id : product.id,
-                          title : product.title,
-                          price : product.price,
-                          image : product.image,
-                          category : product.category,
-                          description : product.description,
-                          length : product.length,
-                          quantity:1}
-                          
-                        ))}
+  onClick={(e) => {
+  e.stopPropagation();
+  dispatch(addToCart({
+    id: product.id,
+    title: product.title,
+    price: product.price,
+    image: product.thumbnail || product.images[0],
+    category: product.category,
+    description: product.description,
+    length: product.length,
+    quantity: 1,
+  }));
+}}
 
             className=" h-9 bg-gray-900 border-none rounded-lg text-xs text-white hover:bg-gray-700 transition w-full shadow-lg cursor-pointer"
           >
@@ -428,19 +421,22 @@ const displayedProducts = isMobile ? currentProducts : sortedProducts;
   <button
     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
     disabled={currentPage === 1}
-    className="px-3 py-3 border rounded-full disabled:opacity-50"
+    hidden={currentProducts.length < 6}
+    className={`px-3 py-3 border rounded-full disabled:opacity-50`}
   >
     <ArrowLeft className="w-4 h-4" />
   </button>
 
 
   {/* Next */}
-  <button
+  <button 
+    
     onClick={() =>
       setCurrentPage((p) => Math.min(p + 1, totalPages))
     }
     disabled={currentPage === totalPages}
-    className="px-3 py-3 border rounded-full disabled:opacity-50"
+    hidden={currentProducts.length < 6}
+    className={`px-3 py-3 border rounded-full disabled:opacity-50 `}
   >
     <ArrowRight className="w-4 h-4" />
   </button>

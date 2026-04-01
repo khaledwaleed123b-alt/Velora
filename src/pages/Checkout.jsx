@@ -143,7 +143,7 @@ const handleSubmit = (values) => {
                 <div className='flex flex-col gap-3'>
                   {products.map((product) => (
                     <div key={product.id} className="px-2 py-3 rounded-lg shadow-lg flex items-center justify-between bg-white">
-                      <div className='flex items-center gap-2'>
+                      <div className='md:flex-row flex flex-col items-center gap-2'>
                         <img src={product.image} alt={product.title} className="w-20 h-20 mb-4 object-contain" />
                         <h2 className="text-sm font-semibold w-[150px]">{product.title}</h2>
                       </div>

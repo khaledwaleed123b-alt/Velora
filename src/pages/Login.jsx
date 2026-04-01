@@ -118,7 +118,7 @@ localStorage.setItem("userInfo", JSON.stringify(userData))
 
   return (
 
-   <div className='bg-gray-100 min-h-screen grid md:grid-cols-2 grid-cols-1 gap-10   items-center justify-center'>
+   <div className='bg-gray-100 min-h-screen grid md:grid-cols-2 grid-cols-1 gap-10   items-center justify-center p-4'>
 
       {/* Left Section */}
 
