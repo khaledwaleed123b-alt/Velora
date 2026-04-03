@@ -6,6 +6,7 @@ import {
   setPersistence,
   signInWithPopup,
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -40,4 +41,5 @@ setPersistence(auth, browserLocalPersistence)
   });
 
 export const googleProvider = new GoogleAuthProvider();
+export const db = getFirestore(app);
 export default app;

@@ -1,63 +1,77 @@
-import { Star, StarHalf } from "lucide-react"
+import { Star } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+
 import { Link, useNavigate } from "react-router-dom"
-import { addToCart } from "../store/addToCartslice"
-import { setSelectedProduct } from "../store/productDetail"
+
+
+import useCart from "../hook/useCart"
+import { getProductsByCategory } from "../store/api/api"
 
 
 
-const Products = () => {
+
+const Products = ({ selectedCategory}) => {
+
+
+const {handleAddToCart} = useCart();
+
 
 const [products, setProducts] = useState([])
 const [loading, setLoading] = useState(true)
 
 
 
-const dispatch = useDispatch()
-
-
-
+const FASHION_CATEGORIES = [
+  "mens-shirts",
+  "fragrances",
+  "mens-watches",
+  "womens-watches",
+  "womens-dresses",
+  "womens-bags",
+  "womens-jewellery",
+  "sunglasses",
+  "mens-shoes",
+  "womens-shoes",
+]
 
 
 useEffect(() => {
- const getProducts = async () => {
-    try {
-        const response = await fetch ("https://dummyjson.com/products")
-        const data = await response.json()
 
-  
-    const shuffled = data.products.sort(() => 0.5 - Math.random())
-
-    
-    const randomProducts = shuffled.slice(0, 8)
-
-
-
-setTimeout(() => {
-  setProducts(randomProducts);
-  setLoading(false);
-  console.log(data);
-}, 1000);
-
-
-
-
-
+ if (selectedCategory) {
+       
+        getProductsByCategory(selectedCategory)
+          .then((data) => setProducts(data.products || []))
+          .finally(() => setLoading(false))
+      } else {
         
-    } catch (error) {
-        console.error("Error fetching products:", error)
-    }
- }
+        Promise.all(
+          FASHION_CATEGORIES.map((cat) =>
+            getProductsByCategory(cat).then((data) => data.products || [])
+          )
+        )
+          .then((results) => {
+            const allFashionProducts = results.flat()
+                const shuffled = allFashionProducts.sort(() => 0.5 - Math.random())
+                const randomProducts = shuffled.slice(0, 8)
+                setProducts(randomProducts);
+          
+         })
+         .finally(() => setLoading(false))
+     }
+   }, [selectedCategory])
 
-getProducts()
-}, [])
+
+
+
+
+
+
 
 
   const navigate = useNavigate();
 
   const handleProductClick = (product) => {
-    dispatch(setSelectedProduct(product));
+
     navigate(`/product/${product.id}`);
   };
 
@@ -95,11 +109,11 @@ getProducts()
 
     {products.map((product) => (
 
-       <div 
-       
+        <div 
+        key={product.id}
         className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
-         onClick={() => handleProductClick(product)}
-       >
+        onClick={() => handleProductClick(product)}
+        >
       
       {/* Image */}
       <div className="bg-gray-50 md:h-48 flex items-center justify-center p-4 h-38">
@@ -123,7 +137,7 @@ getProducts()
           </span>
         </div>
 
-        {/* Meta — stock, category, rating */}
+        
         <div className="flex-col flex sm:flex-row items-center gap-2">
           <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-green-600 flex-shrink-0"></span>
@@ -139,19 +153,10 @@ getProducts()
         <div className=" gap-2 mt-auto py-3 px-2 grid md:grid-cols-2 grid-cols-1 ">
 
           <button
-   onClick={(e) => {
-  e.stopPropagation(); 
-  dispatch(addToCart({
-    id: product.id,
-    title: product.title,
-    price: product.price,
-    image: product.thumbnail || product.images[0],
-    category: product.category,
-    description: product.description,
-    length: product.length,
-    quantity: 1,
-  }));
-}}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart(product);
+            }}
             className=" h-9 bg-gray-900 border-none rounded-lg text-xs text-white hover:bg-gray-700 transition w-full shadow-lg cursor-pointer"
           >
             Add to cart

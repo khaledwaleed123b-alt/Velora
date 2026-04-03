@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
 import { logout } from "../store/userslice"
 import Logo from "../assets/LogoWhite.png"
-
+import useCart from "../hook/useCart"
+import { getAuth, signOut } from "firebase/auth"
 
 
 const Navbar = () => {
@@ -15,18 +16,16 @@ const Navbar = () => {
 
 
 
-const cartProducts = useSelector((state) => state.cart.products)
-
-const totalUniqueProducts = cartProducts.length
+const { totalItems } = useCart()
 
 const dispatch = useDispatch()
 
-const handleLogout = () => {
 
+const handleLogout = async () => {
+  const auth = getAuth()
+  await signOut(auth)       
   dispatch(logout())
-
   localStorage.removeItem("userInfo")
-
 }
 
 const [userOpen , setUserOpen] = useState(false)
@@ -55,7 +54,11 @@ const userInfo = useSelector((state) => state.user.userInfo)
     <div className="relative flex items-center gap-4">
 
       <div className="relative">
-      <div className="absolute -top-1 -right-1 bg-white px-[2px]  text-black rounded-full text-xs">{totalUniqueProducts}</div>
+      {totalItems > 0 && (
+  <div className="absolute -top-1 -right-1 bg-white px-[2px] text-black rounded-full text-xs">
+    {totalItems}
+  </div>
+)}
       <Link to="/cart"><ShoppingCart className="hover:text-gray-300" /></Link>
 </div>
 

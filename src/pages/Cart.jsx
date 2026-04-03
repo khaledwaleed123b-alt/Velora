@@ -1,20 +1,22 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { decrementQuantity, incrementQuantity, removeFromCart } from '../store/addToCartslice';
-import { Trash } from 'lucide-react';
+
 import { Link } from 'react-router-dom';
+import useCart from '../hook/useCart';
 
 const Cart = () => {
 
-const products = useSelector((state) => state.cart.products);
+  const {
+    cartProducts,
+    totalPrice,
+    handleRemoveFromCart,
+    handleIncrement,
+    handleDecrement,
+    handleClearCart,
+  } = useCart()
 
 
-const totalPrice = products.reduce((total, product) => total + product.price * product.quantity, 0)
 
 
 
-
-const dispatch = useDispatch()
 
 
   return (
@@ -33,7 +35,7 @@ const dispatch = useDispatch()
 
     </div>
 
-      {products.length === 0 ? (
+      {cartProducts.length === 0 ? (
           <div className='md:py-20 py-32'>
           <p className="text-gray-600 text-2xl font-bold">Your cart is empty.</p>
         </div>
@@ -42,7 +44,7 @@ const dispatch = useDispatch()
         <div className='grid grid-cols-1 gap-5'>
 
         <div className="grid grid-cols-1 gap-6 border p-4 rounded-lg  border-gray-600 justify-center items-center bg-gray-100 shadow-xl ">
-          {products.map((product) => (
+          {cartProducts.map((product) => (
             <div key={product.id} className=" p-4 rounded-lg shadow-lg flex gap-20 items-center justify-around bg-white" >
 
               <div className='flex flex-col items-center gap-2 justify-center'>
@@ -53,10 +55,10 @@ const dispatch = useDispatch()
               <div className='flex flex-col md:flex-row gap-5 md:m-0 -ml-10'>
 
               <div className='flex items-center gap-2 justify-center'>
-              <button onClick={() => dispatch(incrementQuantity(product.id))} className="bg-transparent text-black border border-gray-500 py-2 px-4 rounded-lg hover:bg-gray-300 md:text-base text-xs cursor-pointer">
+              <button onClick={() => handleIncrement(product.id)} className="bg-transparent text-black border border-gray-500 py-2 px-4 rounded-lg hover:bg-gray-300 md:text-base text-xs cursor-pointer">
                 +
               </button>
-              <button onClick={() => dispatch(decrementQuantity(product.id))} className="bg-transparent text-black border border-gray-500 py-2 px-4 rounded-lg hover:bg-gray-300 md:text-base text-xs cursor-pointer">
+              <button onClick={() => handleDecrement(product.id)} className="bg-transparent text-black border border-gray-500 py-2 px-4 rounded-lg hover:bg-gray-300 md:text-base text-xs cursor-pointer">
                 -
               </button>
               </div>
@@ -71,7 +73,7 @@ const dispatch = useDispatch()
               </div>
 
               <div>
-              <button onClick={() => dispatch(removeFromCart(product.id))} className="bg-red-700 text-white py-2 px-4  w-fit rounded-lg hover:bg-red-800 flex items-center gap-2 justify-center md:text-base text-xs cursor-pointer">
+              <button onClick={() => handleRemoveFromCart(product.id)} className="bg-red-700 text-white py-2 px-4  w-fit rounded-lg hover:bg-red-800 flex items-center gap-2 justify-center md:text-base text-xs cursor-pointer">
                 Remove
               </button>
               </div>
@@ -87,7 +89,7 @@ const dispatch = useDispatch()
             Checkout
           </button>
           </Link>
-          <button onClick={() => dispatch({ type: 'cart/clearCart' })} className="bg-red-700 text-white py-2 px-4 rounded-lg hover:bg-red-800 transition-colors cursor-pointer">
+          <button onClick={handleClearCart} className="bg-red-700 text-white py-2 px-4 rounded-lg hover:bg-red-800 transition-colors cursor-pointer">
             Clear Cart
           </button>
           <Link to="/products" className="">

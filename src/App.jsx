@@ -21,7 +21,7 @@ import AllProducts from "./pages/AllProducts"
 import TermsOfService from "./pages/TermsService"
 import PrivacyPolicy from "./pages/PrivacyPolicy"
 
-
+import { fetchCartFromFirestoreAsync } from "./store/addToCartslice"
 
 
 const Layout = () => {
@@ -42,6 +42,26 @@ const Layout = () => {
 const App = () => {
 
 const dispatch = useDispatch()
+
+  useEffect(() => {
+    const auth = getAuth()
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(setUser({
+          userName: user.displayName,
+          userEmail: user.email,
+          userId: user.uid,
+        }))
+        
+        dispatch(fetchCartFromFirestoreAsync(user.uid))
+      } else {
+        dispatch(logout())
+      }
+    })
+    return () => unsubscribe()
+  }, [dispatch])
+
+
 
 useEffect(() => {
 

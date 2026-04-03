@@ -2,10 +2,11 @@ import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup'
-import { removeFromCart } from '../store/addToCartslice';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 import Swal from 'sweetalert2';
+import useCart from '../hook/useCart';
 
 
 const SubmitButton = () => {
@@ -28,13 +29,11 @@ const Checkout = () => {
 
 const navigate = useNavigate()
 
-const products = useSelector((state) => state.cart.products);
-
-const totalPrice = products.reduce((total, product) => total + product.price * product.quantity, 0)
+const { cartProducts, totalPrice , handleRemoveFromCart , handleClearCart } = useCart();
 
 const userInfo = useSelector((state) => state.user.userInfo)
 
-const dispatch = useDispatch()
+
 
 const handleSubmit = (values) => {
 
@@ -47,7 +46,7 @@ const handleSubmit = (values) => {
     showConfirmButton: false,
   });
   setTimeout(() => {
-    dispatch({ type: 'cart/clearCart' });
+    handleClearCart();
     navigate('/thankyou');
   }, 1500);
 
@@ -67,7 +66,7 @@ const handleSubmit = (values) => {
   return (
       <>
 
-      {products.length === 0 ? (
+      {cartProducts.length === 0 ? (
         <div className='md:py-20 py-32 h-screen flex items-center justify-center'>
           <p className="text-gray-600 text-2xl font-bold">Your cart is empty.</p>
         </div>
@@ -141,7 +140,7 @@ const handleSubmit = (values) => {
                 <h2 className='text-lg font-semibold text-black'>Order Summary</h2>
 
                 <div className='flex flex-col gap-3'>
-                  {products.map((product) => (
+                  {cartProducts.map((product) => (
                     <div key={product.id} className="px-2 py-3 rounded-lg shadow-lg flex items-center justify-between bg-white">
                       <div className='md:flex-row flex flex-col items-center gap-2'>
                         <img src={product.image} alt={product.title} className="w-20 h-20 mb-4 object-contain" />
@@ -156,7 +155,7 @@ const handleSubmit = (values) => {
                         </div>
                         <button
                           type="button"
-                          onClick={() => dispatch(removeFromCart(product.id))}
+                          onClick={() => handleRemoveFromCart(product.id)}
                           className="bg-red-700 text-white py-2 px-4 w-fit rounded-lg hover:bg-red-800 text-xs cursor-pointer"
                         >
                           Remove
@@ -171,7 +170,7 @@ const handleSubmit = (values) => {
                     
                     <SubmitButton />
 
-                    <Link to="/shop">
+                    <Link to="/products">
                       <button type="button" className="bg-gray-400 text-white py-2 px-4 rounded-lg hover:bg-gray-500 transition-colors text-sm cursor-pointer">
                         Continue Shopping
                       </button>

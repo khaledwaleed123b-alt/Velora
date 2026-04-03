@@ -1,16 +1,43 @@
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart } from "../store/addToCartslice";
 import { ArrowLeft, Check, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getProductById } from "../store/api/api";
+import useCart from "../hook/useCart";
 
 function ProductDetail() {
+
+const {handleAddToCart} = useCart();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
 
-  const product = useSelector((state) => state.product.selectedProduct);
+  const {id} = useParams();
+
+  const [product , setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getProductById(id).then((data) => {
+      setProduct(data);
+      setLoading(false);
+    });
+
+  }, [id]);
+
+
+
+  if (loading) {
+    return (
+        <div className="flex justify-center items-center h-screen">
+    <div className="w-12 h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+  </div>
+    )
+  }
+
 
    if (!product) {
     return (
@@ -20,13 +47,14 @@ function ProductDetail() {
     );
   }
 
+
   return (
     <div className="container mx-auto px-6 py-12">
 
 
        <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6"
+        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6 cursor-pointer"
       >
         <span><ArrowLeft className="w-4 h-4" /></span> Back
       </button>
@@ -76,25 +104,14 @@ function ProductDetail() {
 
           
             <button
-              onClick={() =>
-                dispatch(
-                  addToCart({
-                    ...product,
-                    quantity: 1, }) ,
-                    navigate("/cart")
-
-                )
-              }
+              onClick={() => handleAddToCart(product)}
               className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition cursor-pointer"
             >
               Add To Cart
             </button>
 
             <button className="px-6 py-3 border rounded-lg hover:bg-gray-100 transition cursor-pointer"
-              onClick={() => dispatch(addToCart({
-                ...product,
-                quantity: 1,
-              }), navigate("/checkout"))}
+            onClick={() => {handleAddToCart(product); navigate("/checkout")}}
             >
 
               Buy Now
