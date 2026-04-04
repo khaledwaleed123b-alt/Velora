@@ -3,7 +3,7 @@ import { getProductsByCategory } from "../store/api/api"
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Star } from 'lucide-react'
 import useCart from "../hook/useCart"
-
+import {motion} from "framer-motion"
 
 
 
@@ -105,7 +105,7 @@ const {handleAddToCart} = useCart();
 
 
   return (
-    <div>
+    <div className="flex flex-col">
 
 
         {loading ? (
@@ -118,15 +118,19 @@ const {handleAddToCart} = useCart();
 
 
 
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6  mx-auto overflow-hidden">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6  mx-auto overflow-hidden w-full">
 
     {currentProducts.map((product) => (
 
-       <div
-       onClick={() => handleProductClick(product)}
-       key={product.id}
-       className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer">
-      
+       <motion.div
+          onClick={() => handleProductClick(product)}
+          key={product.id}
+          className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          >
       {/* Image */}
       <div className="bg-gray-50 md:h-48 flex items-center justify-center p-4 h-38">
         <img
@@ -176,12 +180,16 @@ const {handleAddToCart} = useCart();
         </div>
 
       </div>
-    </div>
+    </motion.div>
 
     ))}
+    </div>
 
-<div className="w-screen overflow-x-auto justify-center ">
-<div className="flex w-full items-center justify-center gap-30 -ml-5 mt-10 ">
+)}
+
+
+<div className="w-full overflow-x-auto justify-center flex items-center p-4 ">
+<div className="flex w-full items-center justify-center gap-30  ">
 
   {/* Prev */}
   <button
@@ -201,8 +209,9 @@ const {handleAddToCart} = useCart();
       setCurrentPage((p) => Math.min(p + 1, totalPages))
     }
     disabled={currentPage === totalPages}
-    hidden={sortedProducts.length <= itemsPerPage}
-    className={`px-3 py-3 border rounded-full disabled:opacity-50 cursor-pointer`}
+    hidden={ sortedProducts.length <= itemsPerPage }
+    
+    className={`px-3 py-3 border rounded-full disabled:opacity-50 cursor-pointer `}
   >
     <ArrowRight className="w-4 h-4" />
   </button>
@@ -211,8 +220,7 @@ const {handleAddToCart} = useCart();
 
 
   </div>
-</div>
-)}
+
 
   {sortedProducts.length === 0 && !loading && (
     <div className="flex items-center justify-center h-screen">

@@ -1,12 +1,21 @@
+import {motion} from 'framer-motion'
+
+
+
 const PrivacyPolicy = () => {
   return (
-    <div className="max-w-3xl mx-auto px-6 py-16">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration:0.5 }}
+      className="max-w-3xl mx-auto px-6 py-16">
 
       {/* Header */}
       <div className="mb-12">
         <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">Legal</p>
         <h1 className="text-3xl font-medium text-gray-900 mb-4">Privacy Policy</h1>
-        <p className="text-sm text-gray-400">Last updated: March 2025</p>
+        <p className="text-sm text-gray-400">Last updated: March 2026</p>
       </div>
 
       {/* Sections */}
@@ -120,7 +129,7 @@ const PrivacyPolicy = () => {
         </section>
 
       </div>
-    </div>
+    </motion.div>
   )
 }
 

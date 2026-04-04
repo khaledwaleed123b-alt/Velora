@@ -9,7 +9,7 @@ import Swal from 'sweetalert2'
 import LogoDark from '../assets/LogoDark.png'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../store/userslice'
-
+import {motion} from 'framer-motion'
 const Login = () => {
 
   const navigate = useNavigate()
@@ -124,24 +124,40 @@ localStorage.setItem("userInfo", JSON.stringify(userData))
 
      <div className='flex flex-col  container mx-auto  md:bg-white md:h-screen justify-center items-center relative pt-10 md:mt-0'>
 
-       <img src={LogoDark} alt="Velora Logo" className='lg:w-50 md:w-40 absolute lg:top-35 md:top-45  md:flex hidden ' />
+       <motion.img
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+       src={LogoDark} alt="Velora Logo" className='lg:w-50 md:w-40 absolute lg:top-35 md:top-45  md:flex hidden ' />
 
         <div className='flex flex-col    lg:-mt-10  items-center justify-center gap-7 '>
 
-          <h1 className='  text-2xl  lg:text-3xl font-bold text-center font-serif text-Black'>
+          <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+          className='  text-2xl  lg:text-3xl font-bold text-center font-serif text-Black'>
             Welcome Back To Velora
-          </h1>
+          </motion.h1>
 
-          <p className='text-gray-600 text-center max-w-md'>
+          <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+          className='text-gray-600 text-center max-w-md'>
             Sign in to continue your shopping journey with Velora.
-          </p>
+          </motion.p>
 
         </div>
       </div>
 
       {/* Right Section */}
 
-      <div className='flex flex-col items-center justify-center container mx-auto'>
+      <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.1 }}
+      className='flex flex-col items-center justify-center container mx-auto'>
 
         <Formik
 
@@ -277,7 +293,7 @@ localStorage.setItem("userInfo", JSON.stringify(userData))
 
         </Formik>
 
-      </div>
+      </motion.div>
 
     </div>
   )

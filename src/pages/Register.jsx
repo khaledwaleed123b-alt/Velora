@@ -1,12 +1,11 @@
-
-
+import {motion} from 'framer-motion'
 import * as Yup from 'yup';
 import { getAuth, createUserWithEmailAndPassword , updateProfile } from "firebase/auth";
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useState } from 'react';
-import {  CheckCircle2, Eye, EyeOff, Mail, MailPlus, User } from 'lucide-react';
+import {  CheckCircle2, Eye, EyeOff, Mail,  User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext'
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link,  useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import LogoDark from '../assets/LogoDark.png'
 import { useDispatch } from 'react-redux';
@@ -154,20 +153,36 @@ const handleGoogleSignIn = async () => {
 
 
     
-    <div className='flex flex-col  container mx-auto  md:bg-white md:h-screen justify-center items-center relative pt-10 md:mt-0'>
-    <img src={LogoDark} alt="Velora Logo" className='lg:w-50 md:w-40 absolute lg:top-35 md:top-45  md:flex hidden ' />
+    <div className='flex flex-col  container mx-auto  md:bg-white md:h-screen justify-center items-center relative pt-10 md:mt-0 '>
+    <motion.img 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+    src={LogoDark} alt="Velora Logo" className='lg:w-50 md:w-40 absolute md:top-50 lg:top-30  md:flex hidden ' />
 
     <div className='flex flex-col lg:-mt-10  items-center justify-center gap-7 '>
 
-      <h1 className='  text-2xl  lg:text-3xl font-bold text-center font-serif text-Black'>Welcome To Velora
-      </h1>
-            <p className='text-gray-600 text-center max-w-md'>
+      <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+      className='text-2xl  lg:text-3xl font-bold text-center font-serif text-Black'>Welcome To Velora
+      </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+            className='text-gray-600 text-center max-w-md'>
             Create an account to continue your shopping journey with Velora.
-          </p>
+          </motion.p>
     </div>
     </div>
 
-    <div className='flex flex-col items-center justify-center '>
+    <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.1 }}
+    className='flex flex-col items-center justify-center '>
     
     <Formik
     
@@ -288,6 +303,7 @@ const handleGoogleSignIn = async () => {
         </div>
 
         <div>
+
           <label htmlFor="repeatPassword">Re-Enter Password</label>
 
           <div className='relative'>
@@ -338,7 +354,8 @@ const handleGoogleSignIn = async () => {
 
 
             {/* Divider */}
-<div className='flex items-center gap-3 my-4'>
+<div 
+className='flex items-center gap-3 my-4'>
   <div className='flex-1 h-px bg-gray-200'></div>
   <span className='text-sm text-gray-400'>or</span>
   <div className='flex-1 h-px bg-gray-200'></div>
@@ -359,7 +376,8 @@ const handleGoogleSignIn = async () => {
   <span className='text-sm'>Continue with Google</span>
 </button>
 
-    <div className='items-center w-full justify-center text-center mt-4'>
+    <div 
+    className='items-center w-full justify-center text-center mt-4'>
     <p className='text-gray-500 text-sm '> 
       Already have an account? <Link to="/login" className='text-blue-500 hover:underline cursor-pointer'>Login here</Link>
     </p>
@@ -382,7 +400,7 @@ const handleGoogleSignIn = async () => {
 
 
     </Formik>
-</div>
+</motion.div>
 </div>
 
   )

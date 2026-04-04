@@ -1,8 +1,8 @@
 import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup'
-
+import { motion } from 'framer-motion';
+import { AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 import Swal from 'sweetalert2';
@@ -62,6 +62,23 @@ const handleSubmit = (values) => {
   })
 
 
+const container = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.8
+    }
+  }
+};
+
+const item = {
+  exit: {
+    opacity: 0,
+    y: 40
+  }
+};
+
+
 
   return (
       <>
@@ -85,7 +102,11 @@ const handleSubmit = (values) => {
             <section className='flex md:flex-row flex-col w-full items-center justify-around gap-10 px-5 py-10'>
 
               {/* Left — User Info */}
-              <div className="grid grid-cols-1 gap-6 border p-4 rounded-lg border-gray-600 bg-gray-100 shadow-xl w-full">
+              <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="grid grid-cols-1 gap-6 border p-4 rounded-lg border-gray-600 bg-gray-100 shadow-xl w-full">
                 <h2 className='text-lg font-semibold text-black'>User Information</h2>
 
                 <div className='flex flex-col gap-5'>
@@ -133,20 +154,35 @@ const handleSubmit = (values) => {
                   </div>
 
                 </div>
-              </div>
+              </motion.div>
 
               {/* Right — Order Summary */}
               <div className="grid grid-cols-1 gap-6 border p-4 rounded-lg border-gray-600 bg-gray-100 shadow-xl w-full">
                 <h2 className='text-lg font-semibold text-black'>Order Summary</h2>
 
-                <div className='flex flex-col gap-3'>
+                <div 
+                varients={container}
+                className='flex flex-col gap-3'>
+                  <AnimatePresence mode="popLayout">
                   {cartProducts.map((product) => (
-                    <div key={product.id} className="px-2 py-3 rounded-lg shadow-lg flex items-center justify-between bg-white">
+                    <motion.div 
+                      layout
+                      varients={item}
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 1 }}
+                      viewport={{ once: true }}
+                      exit={{ x: -100, opacity: 0 }}
+                    key={product.id} className="px-2 py-3 rounded-lg shadow-lg flex items-center justify-between bg-white">
                       <div className='md:flex-row flex flex-col items-center gap-2'>
                         <img src={product.image} alt={product.title} className="w-20 h-20 mb-4 object-contain" />
                         <h2 className="text-sm font-semibold w-[150px]">{product.title}</h2>
                       </div>
-                      <div className='flex flex-col md:flex-row gap-5'>
+                      <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                      className='flex flex-col md:flex-row gap-5'>
                         <div className='flex flex-col'>
                           <h3 className="text-black mb-2 md:text-base text-sm">{product.quantity}x</h3>
                           <h3 className="text-black mb-2 md:text-base text-sm">
@@ -160,10 +196,10 @@ const handleSubmit = (values) => {
                         >
                           Remove
                         </button>
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   ))}
-
+                  </AnimatePresence>
                   <div className='rounded-lg shadow-lg w-full px-2 py-3 flex flex-col items-center gap-3 bg-white'>
                     <h2 className="text-lg font-bold">SubTotal: ${totalPrice.toFixed(1)}</h2>
 

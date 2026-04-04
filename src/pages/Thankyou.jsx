@@ -1,11 +1,16 @@
-import React from 'react'
+import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 
 export const Thankyou = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen flex items-center justify-center px-6">
       <div className="flex flex-col items-center text-center max-w-md">
 
         {/* Animated checkmark */}
@@ -76,7 +81,7 @@ export const Thankyou = () => {
         </button>
 
       </div>
-    </div>
+    </motion.div>
   )
 }
 

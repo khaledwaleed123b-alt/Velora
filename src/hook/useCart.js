@@ -67,6 +67,7 @@ if (alreadyInCart) {
     if (userInfo) {
         
         dispatch(addToCartAsync({ userId: userInfo.userId, product: cartProduct }))
+        
     } else {
     
         dispatch(addToCart(cartProduct))
@@ -77,8 +78,26 @@ if (alreadyInCart) {
     const handleRemoveFromCart = (productId) => {
     if (userInfo) {
         dispatch(removeFromCartAsync({ userId: userInfo.userId, productId }))
+            Swal.fire({
+    icon: 'success',
+    title: 'Removed from cart!',
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+})
     } else {
         dispatch(removeFromCart(productId))
+    Swal.fire({
+    icon: 'success',
+    title: 'Removed from cart!',
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+})
     }
     }
 
@@ -104,8 +123,27 @@ if (alreadyInCart) {
   const handleClearCart = () => {
     if (userInfo) {
       dispatch(clearCartAsync(userInfo.userId))
+    Swal.fire({
+    icon: 'success',
+    title: 'Cleared cart!',
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+})
     } else {
-      dispatch(clearCart())
+    dispatch(clearCart())
+    Swal.fire({
+    icon: 'success',
+    title: 'Cleared cart!',
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+})
+
     }
   }
 

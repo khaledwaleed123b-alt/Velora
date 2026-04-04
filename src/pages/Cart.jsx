@@ -1,6 +1,9 @@
 
 import { Link } from 'react-router-dom';
 import useCart from '../hook/useCart';
+import { motion } from 'framer-motion';
+import { AnimatePresence } from "framer-motion";
+
 
 const Cart = () => {
 
@@ -14,7 +17,21 @@ const Cart = () => {
   } = useCart()
 
 
+const container = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.8
+    }
+  }
+};
 
+const item = {
+  exit: {
+    opacity: 0,
+    y: 40
+  }
+};
 
 
 
@@ -43,9 +60,28 @@ const Cart = () => {
 
         <div className='grid grid-cols-1 gap-5'>
 
-        <div className="grid grid-cols-1 gap-6 border p-4 rounded-lg  border-gray-600 justify-center items-center bg-gray-100 shadow-xl ">
+
+        <motion.div 
+        variants={container}
+        initial={{ opacity: 0, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="grid grid-cols-1 gap-6 border p-4 rounded-lg  border-gray-600 justify-center items-center bg-gray-100 shadow-xl ">
+          <AnimatePresence mode="popLayout">
           {cartProducts.map((product) => (
-            <div key={product.id} className=" p-4 rounded-lg shadow-lg flex gap-20 items-center justify-around bg-white" >
+
+            <motion.div 
+            layout
+            varients={item}
+            key={product.id} className=" p-4 rounded-lg shadow-lg flex gap-20 items-center justify-around bg-white" 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
+            exit={{ x: -100, opacity: 0 }}
+            
+            >
 
               <div className='flex flex-col items-center gap-2 justify-center'>
               <img src={product.image} alt={product.title} className="md:w-30 md:h-30 w-20 h-20 mb-4" />
@@ -73,16 +109,23 @@ const Cart = () => {
               </div>
 
               <div>
-              <button onClick={() => handleRemoveFromCart(product.id)} className="bg-red-700 text-white py-2 px-4  w-fit rounded-lg hover:bg-red-800 flex items-center gap-2 justify-center md:text-base text-xs cursor-pointer">
+              <button onClick={() => handleRemoveFromCart(product.id)
+              
+              } className="bg-red-700 text-white py-2 px-4  w-fit rounded-lg hover:bg-red-800 flex items-center gap-2 justify-center md:text-base text-xs cursor-pointer">
                 Remove
               </button>
               </div>
 </div>
-            </div>
+            </motion.div>
           ))}
+</AnimatePresence>
 
-
-          <div className='  rounded-lg shadow-lg  w-full h-fit p-10 flex flex-col items-center justify-center gap-4 bg-white'>
+          <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: true }}
+          className='  rounded-lg shadow-lg  w-full h-fit p-10 flex flex-col items-center justify-center gap-4 bg-white'>
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold">SubTotal: ${totalPrice.toFixed(1)}</h2>
           <Link to="/checkout">
           <button className="bg-gray-900 text-white py-2 px-4 rounded-lg hover:bg-black transition-colors cursor-pointer">
@@ -97,9 +140,9 @@ const Cart = () => {
               Continue Shopping
             </button>
           </Link>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
 
 
 

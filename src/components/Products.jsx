@@ -2,7 +2,7 @@ import { Star } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Link, useNavigate } from "react-router-dom"
-
+import {motion} from "framer-motion"
 
 import useCart from "../hook/useCart"
 import { getProductsByCategory } from "../store/api/api"
@@ -83,12 +83,17 @@ useEffect(() => {
 
     <div className="flex flex-col">
 
-    <div className="flex  w-full  px-10 relative">
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: true }}
+      className="flex  w-full  px-10 relative">
       <h1 className="md:text-xl text-lg lg:text-2xl font-bold text-center pt-8 pb-4 justify-start">Featured Products</h1>
       <Link to="/products" className="md:pt-8 pt-9 pb-4 absolute right-10">
         <p className="md:text-lg text-sm lg:text-xl  text-gray-600">View All</p>
       </Link>
-    </div>
+    </motion.div>
 
     <div className='bg-black  w-[100%] h-[1px]  self-center justify-center shadow-lg'></div>
 
@@ -109,10 +114,14 @@ useEffect(() => {
 
     {products.map((product) => (
 
-        <div 
+        <motion.div 
         key={product.id}
         className="flex flex-col bg-white border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
         onClick={() => handleProductClick(product)}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
         >
       
       {/* Image */}
@@ -164,7 +173,7 @@ useEffect(() => {
         </div>
 
       </div>
-    </div>
+    </motion.div>
 
     ))}
 

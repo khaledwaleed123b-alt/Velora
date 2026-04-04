@@ -1,7 +1,8 @@
 
 import { ArrowDownIcon } from "lucide-react"
 import { useState } from "react"
-
+import { motion } from 'framer-motion';
+import { AnimatePresence } from "framer-motion";
 
 
 
@@ -46,9 +47,14 @@ const categories = [
           ? categories.find((c) => c.slug === selectedCategory)?.name
           : "All"}</span>
     <ArrowDownIcon className={`w-4 h-4 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
-
+    <AnimatePresence>
     {dropdownOpen && (
-      <div className="absolute top-full left-0 mt-2 w-full bg-white border rounded-lg shadow z-10">
+      <motion.div 
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+      className="absolute top-full left-0 mt-2 w-full bg-white border rounded-lg shadow z-10">
         <ul>
          
             <li
@@ -76,8 +82,9 @@ const categories = [
               </li>
             ))}
         </ul>
-      </div>
+      </motion.div>
     )}
+    </AnimatePresence>
   </div>
 
 

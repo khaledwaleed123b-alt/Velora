@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
-
+import { motion } from 'framer-motion';
+import { AnimatePresence } from "framer-motion";
 import { ShoppingCart, User } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
@@ -73,10 +74,15 @@ const userInfo = useSelector((state) => state.user.userInfo)
 
 
 {/* Dropdown */}
-
+<AnimatePresence>
 {userOpen && (
 
-<div className="absolute right-0 top-10 w-40 bg-white text-black rounded-lg shadow-lg flex flex-col z-99999">
+<motion.div 
+initial={{ opacity: 0, y: -10 }}
+animate={{ opacity: 1, y: 0 }}
+exit={{ opacity: 0, y: -10 }}
+transition={{ duration: 0.2 }}
+className="absolute right-0 top-10 w-40 bg-white text-black rounded-lg shadow-lg flex flex-col z-99999 ">
 
 {userInfo ? (
 
@@ -117,10 +123,10 @@ Register
 
 )}
 
-</div>
+</motion.div>
 
 )}
-
+</AnimatePresence>
 
 
 </div> 
